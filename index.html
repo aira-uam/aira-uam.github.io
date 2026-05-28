@@ -1,15 +1,731 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">        
-    <title>AIRA website</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIRA — Advanced Information Retrieval and Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #121933;
+      --surface-2: #182243;
+      --primary: #6aa6ff;
+      --primary-2: #7ef0c5;
+      --text: #edf2ff;
+      --muted: #b8c2e0;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 10px 40px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --max-width: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #09101f 0%, #0f1630 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: min(92%, var(--max-width));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(9, 16, 31, 0.72);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.1rem;
+    }
+
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      display: grid;
+      place-items: center;
+      color: #06111f;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 7rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(106,166,255,0.25), transparent 70%);
+      top: -200px;
+      right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--primary-2);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 680px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.95rem 1.5rem;
+      border-radius: 16px;
+      font-weight: 600;
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #8f8cff);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat {
+      padding: 1.25rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+    }
+
+    .stat h3 {
+      font-size: 2rem;
+      margin-bottom: 0.2rem;
+    }
+
+    section {
+      padding: 5rem 0;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      margin-bottom: 1rem;
+      letter-spacing: -0.04em;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      max-width: 700px;
+      margin-bottom: 3rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, rgba(106,166,255,0.2), rgba(126,240,197,0.2));
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 1.4rem;
+    }
+
+    .card h3 {
+      margin-bottom: 0.8rem;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      color: var(--muted);
+    }
+
+    .members {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .member-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: 0.25s ease;
+    }
+
+    .member-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .member-image {
+      height: 220px;
+      background: linear-gradient(135deg, #21305d, #1c6657);
+      display: grid;
+      place-items: center;
+      font-size: 4rem;
+      font-weight: 800;
+    }
+
+    .member-content {
+      padding: 1.5rem;
+    }
+
+    .member-role {
+      color: var(--primary-2);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .publication-list {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .publication {
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .publication h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1.15rem;
+    }
+
+    .publication-meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .contact-box {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3rem;
+      text-align: center;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .grid-3,
+      .members {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 5rem;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <header>
-        <h1>AIRA (temporary) website</h1>
-    </header>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <div>
+			<img src="logo_aira.png" height="60px"></img>
+		  </div>
+          <div>
+            <!--<div>AIRA</div>-->
+            <small style="color: var(--muted); font-weight: 500;">Advanced Information Retrieval and Access Research Group</small>
+          </div>
+        </div>
 
-  </body>
+        <div class="nav-links">
+          <a href="#research">Research</a>
+          <a href="#members">Members</a>
+          <a href="#publications">Publications</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">🔬 AI · Information Retrieval · Knowledge Access</div>
+          <h1>Advancing intelligent access to information.</h1>
+          <p>
+            AIRA is a research group focused on intelligent systems for information retrieval and access. Our work covers the design and evaluation of search and recommendation methods, data acquisition and processing, the use of machine learning models for natural language understanding and generation, social network analysis, and the development of explainable and agent-based artificial intelligence systems.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#research">Explore Research</a>
+            <a class="btn btn-secondary" href="#publications">Recent Publications</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="eyebrow" style="margin-bottom:1rem;">📈 Research Activity 2015–2025</div>
+          <h2 style="margin-bottom: 1rem;">A decade of research impact</h2>
+          <p style="color: var(--muted);">
+            Between 2015 and 2025, AIRA has consolidated an active international research profile with significant scientific production, competitive projects, and doctoral training in information retrieval, recommendation systems, natural language processing, and explainable AI.
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <h3>76</h3>
+              <p>JCR journal articles</p>
+            </div>
+
+            <div class="stat">
+              <h3>101</h3>
+              <p>International conferences</p>
+            </div>
+
+            <div class="stat">
+              <h3>23</h3>
+              <p>Research projects</p>
+            </div>
+
+            <div class="stat">
+              <h3>16</h3>
+              <p>Technology transfer projects</p>
+            </div>
+
+            <div class="stat">
+              <h3>12</h3>
+              <p>PhD dissertations</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <section id="research">
+      <div class="container">
+        <h2 class="section-title">Research Areas</h2>
+        <p class="section-subtitle">
+          AIRA develops advanced methods and intelligent systems for information access, recommendation, language technologies, social data analysis, and explainable AI.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🔎</div>
+            <h3>Information Retrieval</h3>
+            <p>
+              Design and evaluation of intelligent retrieval systems, semantic search, ranking methods, and interactive access to large-scale information collections.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>Recommender Systems</h3>
+            <p>
+              Personalized recommendation models for multimedia, educational, and online platforms using collaborative, content-based, and hybrid approaches.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">💬</div>
+            <h3>Natural Language Processing</h3>
+            <p>
+              Machine learning and large language model techniques for text understanding, generation, conversational systems, and multilingual applications.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>Social Network Analysis</h3>
+            <p>
+              Analysis of online communities, information diffusion, user behavior, and interaction patterns in digital social environments.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🧩</div>
+            <h3>Explainable and Agent-Based AI</h3>
+            <p>
+              Transparent and interpretable AI systems, autonomous agents, and trustworthy machine learning for decision support and human-AI interaction.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="members">
+      <div class="container">
+        <h2 class="section-title">Research Team</h2>
+        <p class="section-subtitle">
+          AIRA brings together researchers and collaborators in information retrieval, recommender systems, natural language processing, and explainable artificial intelligence.
+        </p>
+
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.4rem;">Professors</h3>
+
+        <div class="members" style="margin-bottom: 4rem;">
+          <div class="member-card">
+            <div class="member-image">AB</div>
+            <div class="member-content">
+              <div class="member-role">Associate Professor (coordinator)</div>
+              <h3>Alejandro Bellogín Kouki</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">IC</div>
+            <div class="member-content">
+              <div class="member-role">Associate Professor (coordinator)</div>
+              <h3>Iván Cantador Gutiérrez</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">FD</div>
+            <div class="member-content">
+              <div class="member-role">Associate Professor</div>
+              <h3>Fernando Díez Rubio</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">LQ</div>
+            <div class="member-content">
+              <div class="member-role">Associate Professor</div>
+              <h3>Lara Quijano Sánchez</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">JJ</div>
+            <div class="member-content">
+              <div class="member-role">Assistant Professor</div>
+              <h3>José Luis Jorro Aragoneses</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">IS</div>
+            <div class="member-content">
+              <div class="member-role">Assistant Professor</div>
+              <h3>Ilia Stepin</h3>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.4rem;">External Researchers</h3>
+
+        <div class="members">
+          <div class="member-card">
+            <div class="member-image">PS</div>
+            <div class="member-content">
+              <div class="member-role">Universidad Pontificia de Comillas</div>
+              <h3>Pablo Sánchez Pérez</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">FL</div>
+            <div class="member-content">
+              <div class="member-role">Cardiff University</div>
+              <h3>Federico Liberatore</h3>
+            </div>
+          </div>
+
+          <div class="member-card">
+            <div class="member-image">PM</div>
+            <div class="member-content">
+              <div class="member-role">Axel Springer National Media & Tech</div>
+              <h3>Pablo Mateos Masa</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="publications">
+      <div class="container">
+        <h2 class="section-title">Recent Publications</h2>
+        <p class="section-subtitle">
+          Selected publications from conferences and journals in information retrieval, machine learning, and human-centered AI.
+        </p>
+
+        <div class="publication-list">
+          
+
+          <div class="publication">
+            <h4>Analysing the Effect of Recommendation Algorithms on the Spread of Misinformation</h4>
+            <div class="publication-meta">M Fernández, A Bellogín, I Cantador · 16th ACM Web Science Conference (WebSci 2024)</div>
+          </div>
+
+          <div class="publication">
+            <h4>Recommendation fairness in e-participation: Listening to minority, vulnerable and NIMBY citizens</h4>
+            <div class="publication-meta">M Alonso-Cortés, I Cantador, A Bellogín · 46th European Conference on Information Retrieval (ECIR 2024)</div>
+          </div>
+
+          <div class="publication">
+            <h4>A Conversational Agent for Argument-driven E-participation</h4>
+            <div class="publication-meta">A Segura-Tinoco, A Holgado-Sánchez, I Cantador, ME Cortés-Cediel, MP Rodríguez Bolívar · 23rd Annual International Conference on Digital Government Research (dg.o 2022)</div>
+          </div>
+
+          <div class="publication">
+            <h4>Point of Interest Recommendation: Pitfalls and Research Directions</h4>
+            <div class="publication-meta">A Bellogin, L Dietz, F Ricci, P Sánchez · ACM Transactions on Recommender Systems</div>
+          </div>
+
+          <div class="publication">
+            <h4>The role of recommendation algorithms in the formation of disinformation networks</h4>
+            <div class="publication-meta">P Muñoz, R Barba-Rojas, F Díez, A Bellogín · Information Processing & Management 62 (6), 104243</div>
+          </div>
+
+          <div class="publication">
+            <h4>Impacts of Mainstream-Driven Algorithms on Recommendations for Children Across Domains: A Reproducibility Study</h4>
+            <div class="publication-meta">R Ungruh, A Bellogín, D Kowald, MS Pera · Proceedings of the Nineteenth ACM Conference on Recommender Systems, 783-791</div>
+          </div>
+
+          <div class="publication">
+            <h4>Smart imputation, better recommendations: Improving traditional point-of-interest recommendation through data augmentation</h4>
+            <div class="publication-meta">P Sánchez, A Bellogín · ACM Transactions on Intelligent Systems and Technology 16 (4), 1-35</div>
+          </div>
+
+          <div class="publication">
+            <h4>Improving Novelty and Diversity of Nearest-Neighbors Recommendation by Exploiting Dissimilarities</h4>
+            <div class="publication-meta">P Sánchez, J Sanz-Cruzado, A Bellogín · European Conference on Information Retrieval, 187-196</div>
+          </div>
+
+          <div class="publication">
+            <h4>Context Trails: A Dataset to Study Contextual and Route Recommendation</h4>
+            <div class="publication-meta">P Sánchez, A Bellogin, JL Jorro-Aragoneses · Proceedings of the Nineteenth ACM Conference on Recommender Systems, 716-725</div>
+          </div>
+
+          <div class="publication">
+            <h4>Modeling disinformation networks on Twitter: structure, behavior, and impact</h4>
+            <div class="publication-meta">P Muñoz, F Díez, A Bellogín · Applied Network Science 9 (1), 1-35</div>
+          </div>
+
+          <div class="publication">
+            <h4>Quantifying polarization in online political discourse</h4>
+            <div class="publication-meta">P Muñoz, A Bellogín, R Barba-Rojas, F Díez · EPJ Data Science 13 (1), 39</div>
+          </div>
+
+          <div class="publication">
+            <h4>Hate speech on Twitter: Profiling users and interaction analysis in the Spanish language</h4>
+            <div class="publication-meta">I Ramiro-López, L Quijano-Sánchez, F Liberatore · Natural Language Processing, 1-48</div>
+          </div>
+
+          <div class="publication">
+            <h4>AGORA: An intelligent system for the anonymization, information extraction and automatic mapping of sensitive documents</h4>
+            <div class="publication-meta">R Juez-Hernandez, L Quijano-Sánchez, F Liberatore, J Gómez · Applied Soft Computing 145, 110540</div>
+          </div>
+
+          <div class="publication">
+            <h4>Towards social fairness in smart policing: Leveraging territorial, racial, and workload fairness in the police districting problem</h4>
+            <div class="publication-meta">F Liberatore, M Camacho-Collados, L Quijano-Sánchez · Socio-Economic Planning Sciences 87, 101556</div>
+          </div>
+
+          <div class="publication">
+            <h4>A software solution for building fuzzy-grounded interactive dialogue-based explanations</h4>
+            <div class="publication-meta">I Stepin, A Catala, JM Alonso-Moral · 2024 IEEE International Conference on Fuzzy Systems (FUZZ-IEEE), 1-8</div>
+          </div>
+
+          <div class="publication">
+            <h4>Information-seeking dialogue for explainable artificial intelligence: Modelling and analytics</h4>
+            <div class="publication-meta">I Stepin, K Budzynska, A Catala, M Pereira-Fariña, JM Alonso-Moral · Argument & Computation 15 (1), 49-107</div>
+          </div>
+
+          <div class="publication">
+            <h4>A proof of concept on dialogue games for explainable artificial intelligence</h4>
+            <div class="publication-meta">I Stepin, A Catala, JM Alonso-Moral · Proceedings of the 4th European Conference on Argumentation 3, 277-290</div>
+          </div>
+
+          <div class="publication">
+            <h4>An empirical study on how humans appreciate automated counterfactual explanations which embrace imprecise information</h4>
+            <div class="publication-meta">I Stepin, JM Alonso-Moral, A Catala, M Pereira-Farina · Information Sciences 618, 379-399</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <h2 class="section-title">Collaborate with AIRA</h2>
+          <p class="section-subtitle" style="margin: 0 auto 2rem;">
+            We are open to academic collaborations, industrial partnerships, and student applications in AI and Information Retrieval.
+          </p>
+
+          <div style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
+            <a class="btn btn-primary" href="mailto:alejandro.bellogin@uam.es">
+              alejandro.bellogin@uam.es
+            </a>
+
+            <a class="btn btn-primary" href="mailto:ivan.cantador@uam.es">
+              ivan.cantador@uam.es
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+      <div>
+        <strong>AIRA</strong> — Advanced Information Retrieval and Access
+      </div>
+
+      <div>
+        © 2026 AIRA Research Group. All rights reserved.
+      </div>
+    </div>
+  </footer>
+</body>
 </html>
